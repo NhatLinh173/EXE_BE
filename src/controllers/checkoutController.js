@@ -14,7 +14,9 @@ const checkoutController = {
       totalAmount,
       status,
       userId,
-      orderCode,
+      orderCodeStatus,
+      orderStatus,
+      idOrder,
     } = req.body;
     try {
       const checkoutData = {
@@ -30,7 +32,9 @@ const checkoutController = {
         totalAmount,
         status,
         userId,
-        orderCode,
+        orderCodeStatus,
+        orderStatus,
+        idOrder,
       };
       const savedCheckout = await checkoutService.createCheckout(checkoutData);
       res.status(201).json(savedCheckout);
@@ -61,22 +65,66 @@ const checkoutController = {
       res.status(500).json({ error: "Internal server error" });
     }
   },
-  updateOrder: async (req, res) => {
-    const { _id, orderCode, status } = req.body;
-    console.log("Received request to update order:", { id, status, orderCode });
+  updateStatus: async (req, res) => {
     try {
-      const updateOrder = await checkoutService.updateOrderStatus(
-        orderCode,
-        status,
-        _id
-      );
-      res.json(updateOrder);
-    } catch (error) {
-      if (error.message === "Order not found") {
-        res.status(404).json({ message: error.message });
-      } else {
-        res.status(500).json({ message: "Internal server error" });
+      console.log("Request Body:", req.body);
+      const { orderCodeStatus, status, orderStatus } = req.body;
+      if (!orderCodeStatus || !status || !orderStatus) {
+        return res.status(400).json({ error: "Missing required fields" });
       }
+      const updatedCheckout = await checkoutService.updateStatus(
+        orderCodeStatus,
+        status,
+        orderStatus
+      );
+
+      return res.status(200).json(updatedCheckout);
+    } catch (error) {
+      console.error("Error updating status:", error);
+      return res.status(500).json({ error: "Failed to update status" });
+    }
+  },
+
+  getOrdersByStatus: async (req, res) => {
+    try {
+      const { orderStatus } = req.params;
+      const orders = await checkoutService.getOrdersByStatus(orderStatus);
+      res.status(200).json(orders);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  updateOrderStatus: async (req, res) => {
+    try {
+      const { orderCodeStatus } = req.body;
+      const newOrderStatus = req.body.status;
+      const updatedCheckout = await checkoutService.updateOrderStatus(
+        orderCodeStatus,
+        newOrderStatus
+      );
+      return res.status(200).json(updatedCheckout);
+    } catch (error) {
+      console.error("Error updating status:", error);
+      return res.status(500).json({ error: "Failed to update status" });
+    }
+  },
+
+  getPaidTransactions: async (req, res) => {
+    try {
+      const paidTransactions = await checkoutService.getPaidTransactions();
+      res.json(paidTransactions);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  deleteTransaction: async (req, res) => {
+    try {
+      await checkoutService.deleteTransactions(req.params.id);
+      res.status(200).json({ message: "Order deleted successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
   },
 };

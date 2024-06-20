@@ -57,6 +57,14 @@ const CheckoutSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  orderStatus: {
+    type: String,
+    require: true,
+  },
+  orderCodeStatus: {
+    type: String,
+    require: true,
+  },
 });
 
 module.exports = mongoose.model("Checkout", CheckoutSchema);

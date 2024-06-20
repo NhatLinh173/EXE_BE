@@ -2,9 +2,16 @@ const express = require("express");
 const router = express.Router();
 const payOs = require("../utils/payOs");
 router.post("/create", async function (req, res) {
-  const { description, returnUrl, cancelUrl, totalPrice } = req.body;
+  const { description, returnUrl, cancelUrl, totalPrice, orderCodeStatus } =
+    req.body;
 
-  if (!totalPrice || !returnUrl || !cancelUrl || !description) {
+  if (
+    !totalPrice ||
+    !returnUrl ||
+    !cancelUrl ||
+    !description ||
+    !orderCodeStatus
+  ) {
     return res
       .status(400)
       .send(
@@ -18,6 +25,7 @@ router.post("/create", async function (req, res) {
     description,
     cancelUrl: "http://localhost:3006/fail",
     returnUrl: "http://localhost:3006/success",
+    orderCodeStatus,
   };
 
   try {
@@ -27,6 +35,7 @@ router.post("/create", async function (req, res) {
       returnUrl,
       cancelUrl,
       description,
+      orderCodeStatus,
     });
     return res.json({
       error: 0,
@@ -42,6 +51,7 @@ router.post("/create", async function (req, res) {
         qrCode: paymentLinkRes.qrCode,
         cancelUrl: body.cancelUrl,
         returnUrl: body.returnUrl,
+        orderCodeStatus: body.orderCodeStatus,
       },
     });
   } catch (error) {

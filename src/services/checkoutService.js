@@ -1,5 +1,5 @@
 const Checkout = require("../models/Checkout");
-
+const mongoose = require("mongoose");
 const checkoutService = {
   createCheckout: async (checkoutData) => {
     try {
@@ -29,22 +29,64 @@ const checkoutService = {
     }
   },
 
-  updateOrderStatus: async (_id, orderCode, status) => {
+  getOrdersByStatus: async (orderStatus) => {
     try {
-      const updateOrder = await Checkout.findOneAndUpdate(
-        _id,
-        { orderCode, status },
+      const order = await Checkout.find({
+        orderStatus: orderStatus,
+      });
+      return order;
+    } catch (error) {
+      throw new Error("Error getting order by status: " + error.message);
+    }
+  },
+
+  updateStatus: async (orderCodeStatus, newStatus, newOrderStatus) => {
+    try {
+      console.log("Received orderCodeStatus:", orderCodeStatus);
+      console.log("Received newStatus:", newStatus);
+      console.log("Received newOrderStatus:", newOrderStatus);
+      const updatedCheckout = await Checkout.findOneAndUpdate(
+        { orderCodeStatus: orderCodeStatus },
+        { $set: { status: newStatus, orderStatus: newOrderStatus } },
         { new: true }
       );
-
-      if (!updateOrder) {
-        throw new Error("Order not found");
+      if (!updatedCheckout) {
+        throw new Error("Checkout not found with provided orderCodeStatus");
       }
-
-      return updateOrder;
+      console.log("Updated Checkout:", updatedCheckout);
+      return updatedCheckout;
+    } catch (error) {
+      console.error("Error in updateStatus:", error);
+      throw error;
+    }
+  },
+  updateOrderStatus: async (orderCodeStatus, newOrderStatus) => {
+    try {
+      const updatedCheckout = await Checkout.findOneAndUpdate(
+        { orderCodeStatus: orderCodeStatus },
+        { orderStatus: newOrderStatus },
+        { new: true }
+      );
+      if (!updatedCheckout) {
+        throw new Error("Checkout not found with provided orderCodeStatus");
+      }
+      return updatedCheckout;
     } catch (error) {
       throw error;
     }
+  },
+
+  getPaidTransactions: async () => {
+    try {
+      const paidTransactions = await Checkout.find({ status: "PAID" });
+      return paidTransactions;
+    } catch (error) {
+      throw new Error("Error fetching paid transaction");
+    }
+  },
+
+  deleteTransactions: async (orderId) => {
+    return await Checkout.findByIdAndDelete(orderId);
   },
 };
 module.exports = checkoutService;
