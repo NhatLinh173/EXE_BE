@@ -23,8 +23,8 @@ router.post("/create", async function (req, res) {
     orderCode: Number(String(new Date().getTime()).slice(-6)),
     amount: totalPrice,
     description,
-    cancelUrl: "http://localhost:3006/fail",
-    returnUrl: "http://localhost:3006/success",
+    cancelUrl: "https://exe-fe.onrender.com/fail",
+    returnUrl: "https://exe-fe.onrender.com/success",
     orderCodeStatus,
   };
 
