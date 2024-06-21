@@ -22,7 +22,9 @@ app.use(express.json());
 
 // Kết nối MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/exe")
+  .connect(
+    "mongodb+srv://linh270702:ZQytxhfVyF4Q0yev@cluster0.aih5xfq.mongodb.net/"
+  )
   .then(() => {
     console.log("Connected to MongoDB");
   })
