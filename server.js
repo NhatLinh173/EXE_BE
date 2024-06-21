@@ -20,7 +20,7 @@ app.use(express.json());
 
 mongoose
   .connect(
-    "mongodb+srv://linh270702:lAhX6vFNxgNYE3bN@cluster0.aih5xfq.mongodb.net/",
+    "mongodb+srv://linh270702:lAhX6vFNxgNYE3bN@cluster0.aih5xfq.mongodb.net/EXE",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
