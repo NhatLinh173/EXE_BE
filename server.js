@@ -3,7 +3,6 @@ const express = require("express");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
 
-// Import các router và controller
 const authRouter = require("./src/routers/authRoutes");
 const userRouter = require("./src/routers/userRoutes");
 const productRouter = require("./src/routers/productRoutes");
@@ -17,13 +16,15 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Middleware để parse JSON
 app.use(express.json());
 
-// Kết nối MongoDB
 mongoose
   .connect(
-    "mongodb+srv://linh270702:ZQytxhfVyF4Q0yev@cluster0.aih5xfq.mongodb.net/"
+    "mongodb+srv://linh270702:lAhX6vFNxgNYE3bN@cluster0.aih5xfq.mongodb.net/",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
   )
   .then(() => {
     console.log("Connected to MongoDB");
@@ -32,7 +33,6 @@ mongoose
     console.error("Failed to connect to MongoDB:", error);
   });
 
-// Định nghĩa các route
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/product", productRouter);
