@@ -15,7 +15,6 @@ const productService = {
   getAllProduct: async () => {
     try {
       const products = await Product.find();
-
       return products;
     } catch (error) {
       console.error("Error fetching products: ", error);
