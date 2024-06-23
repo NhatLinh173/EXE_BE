@@ -22,6 +22,7 @@ mongoose
   .connect(dbUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
   })
   .then(() => {
     console.log("Connect DB success!");
