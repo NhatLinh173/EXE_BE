@@ -2,7 +2,7 @@ const express = require("express");
 
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
-
+require("dotenv").config();
 const authRouter = require("./src/routers/authRoutes");
 const userRouter = require("./src/routers/userRoutes");
 const productRouter = require("./src/routers/productRoutes");
@@ -17,20 +17,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-
+const dbUri = `mongodb+srv://linh270702:C7B54jdcuStfb0Rm@exe.wpuiaje.mongodb.net/EXE?retryWrites=true&w=majority`;
 mongoose
-  .connect(
-    "mongodb+srv://linh270702:lAhX6vFNxgNYE3bN@cluster0.aih5xfq.mongodb.net/EXE",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => {
-    console.log("Connected to MongoDB");
+  .connect(dbUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((error) => {
-    console.error("Failed to connect to MongoDB:", error);
+  .then(() => {
+    console.log("Connect DB success!");
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
   });
 
 app.use("/auth", authRouter);
