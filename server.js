@@ -1,6 +1,6 @@
 const express = require("express");
-
 const nodemailer = require("nodemailer");
+const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const authRouter = require("./src/routers/authRoutes");
@@ -13,6 +13,14 @@ const paymentController = require("./src/controllers/payment-Controller");
 const orderController = require("./src/controllers/oder-controller");
 
 const app = express();
+
+const corsOption = {
+  origin: "https://exe-fe.vercel.app/",
+  method: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOption));
 
 const PORT = process.env.PORT || 3000;
 
