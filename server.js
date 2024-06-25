@@ -11,16 +11,10 @@ const checkoutRouter = require("./src/routers/checkoutRoutes");
 const paymentRouter = require("./src/routers/paymentRoutes");
 const paymentController = require("./src/controllers/payment-Controller");
 const orderController = require("./src/controllers/oder-controller");
-
+const cors = require("./src/utils/cors");
 const app = express();
 
-const corsOption = {
-  origin: "https://exe-fe.vercel.app/",
-  method: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
-
-app.use(cors(corsOption));
+app.use(cors(cors.corsWithOption));
 
 const PORT = process.env.PORT || 3000;
 
